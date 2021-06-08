@@ -26,12 +26,55 @@ routerQuestion.get("/listar_preguntas", function (request, response, next) {
                 console.log("resultado vacio!!!!");
                 response.redirect("/user/login");
             } else {
-                console.log("llamamos al listar_preguntas")
+                console.log("llamamos al listar_preguntas");
                 response.render("listar_preguntas", { questions: result});
             }
         }
     })
 });
+
+
+routerQuestion.get("/formular_pregunta", function (request, response, next) {
+    console.log("redirige a formular pregunta");
+    object = {};
+    response.render("formular_pregunta",  { object2:object });
+}); 
+
+routerQuestion.post("/newQuestion", function (request, response, next) {
+    if (request.body.cuerpo == "") {
+        console.log("Introduciendo una pregunta NULA!");
+        response.status(200);
+        response.render("addPregunta", { errorMsg: "Pregunta no puede ser nulo !" });
+    } else {
+        let pregunta = []
+        if (request.body.titulo != "")
+        pregunta.push(request.body.titulo);
+        if (request.body.cuerpo != "")
+        pregunta.push(request.body.cuerpo);
+        if (request.body.etiquetas != "")
+        pregunta.push(request.body.etiquetas);
+        if (pregunta.length == 0) {
+            response.status(200);
+            response.render("addPregunta", { errorMsg: "La pregunta esta vacia" });
+        } else {
+            controllerQuestion.createQuestion(request.body.question, pregunta, function (err, result) {
+                if (err) { // error interior
+                    next(err);
+                } else {
+                    if (result === "Pregunta ya existe") {
+                        response.status(200);
+                        alert("La pregunta ya existe");
+                        response.render("addPregunta", { errorMsg: result });
+                    } else {
+                        alert("Pregunta creada correctamente");
+                        //ha introducido bien la pregunta y te redirige al menu preguntas
+                        response.redirect("id/" + result)
+                    }
+                }
+            })
+        }
+    }
+})
 /*
 routerQuestion.get("/answer/:id", function (request, response, next) {
     controllerQuestion.getAnswer(request.session.currentUser, request.params.id, function (err, result) {

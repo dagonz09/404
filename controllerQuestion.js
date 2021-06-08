@@ -50,7 +50,7 @@ function getQuestions(callback) {
                         let resultado = {};
                         resultado.titulo = result[k].titulo;
                         resultado.cuerpo = result[k].cuerpo;
-                        resultado.fecha_pregunta = result[k].fecha_pregunta;
+                        resultado.fecha_pregunta = result[k].fecha;
                         resultado.nombre = result[k].nombre;
                         resultado.imagen = result[k].imagen;
                         for(let j=0;j<=result2.length-1;j++){
@@ -70,6 +70,31 @@ function getQuestions(callback) {
         }
     })
 }
+function createQuestion(question, pregunta, callback) {
+    daoQ.hasThisQuestion(pregunta.titulo, function (err, result) {
+        if (err) {
+            callback(err);
+        } else {
+            if (result.length != 0)
+                callback(null, "Pregunta ya existe")
+            else
+                daoQ.insertQuestion(question, function (err, result) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        daoQ.insertOptions(result.insertId, options, true, function (err, options) {
+                            if (err) {
+                                callback(err);
+                            } else {
+                                callback(err, result.insertId);
+                            }
+                        })
+                    }
+                })
+        }
+    })
+}
+
 /*
 function getAnswer(user, questionID, callback) {
     let answer = {}
@@ -191,6 +216,7 @@ function createQuestion(question, pregunta, callback) {
 }
 */
 module.exports = {
-    getQuestions: getQuestions,
-    getQuestion: getQuestion
+    getQuestions    :   getQuestions,
+    getQuestion     :   getQuestion,
+    createQuestion  :   createQuestion
 }

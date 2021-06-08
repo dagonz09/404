@@ -25,7 +25,7 @@ class DAOQuestion {
                 console.log("error recuperando preguntas ",err);
                 callback(err);
             }else{
-                const sql = "SELECT id_pregunta, titulo, cuerpo, fecha_pregunta, nombre, imagen FROM preguntas INNER JOIN usuarios WHERE preguntas.usuario = usuarios.id_usuario";
+                const sql = "SELECT id_pregunta, titulo, cuerpo, nombre, imagen, DATE_FORMAT(fecha_pregunta, '%d/%m/%Y') AS fecha FROM preguntas INNER JOIN usuarios WHERE preguntas.usuario = usuarios.id_usuario";
                 connection.query(sql,function(err,resultado){
                     connection.release();
                     if(err){
