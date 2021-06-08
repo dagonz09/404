@@ -78,23 +78,7 @@ class DAOUsers {
             }
         })
     }
-    getUsers(callback) {
-        this.pool.getConnection(function (err, connection) {
-            if (err) {
-                callback(err);
-            } else {
-                const sql = "SELECT * FROM usuarios";
-                connection.query(sql, function (err, resultado) {
-                    connection.release();
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(err, resultado);
-                    }
-                })
-            }
-        })
-    }
+
     modifyUser(user, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
