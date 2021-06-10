@@ -1,4 +1,4 @@
-class DAOUsers {
+ class DAOUsers {
     constructor(pool) { this.pool = pool; }
     insertUser(user, callback){
         console.log('llamamos al metodo insertUser');
@@ -78,7 +78,41 @@ class DAOUsers {
             }
         })
     }
-
+    getUsers(callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                callback(err);
+            } else {
+                const sql = "SELECT nombre, imagen, reputacion FROM usuarios";
+                const sql2 = "SELECT nombre, imagen, reputacion, id_usuario FROM usuarios join preguntas";
+                connection.query(sql, function (err, resultado) {
+                    connection.release();
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(err, resultado);
+                    }
+                })
+            }
+        })
+    }
+    filterUsersByName(filtro, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                callback(err);
+            } else {
+                const sql = "SELECT nombre, imagen, reputacion FROM usuarios where nombre LIKE ? ";
+                connection.query(sql, "%" + filtro + "%", function (err, resultado) {
+                    connection.release();
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(err, resultado);
+                    }
+                })
+            }
+        })
+    }
     modifyUser(user, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {

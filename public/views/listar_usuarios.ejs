@@ -7,18 +7,22 @@
     <body>
         <%- include("header") %>
         <main>
-            <form action="" method="get">
+            <form action="" method="get" class="busqueda_preguntas">
                 <input type="submit" value="Busqueda" class="button"> 
-                <input type="search" name="busqueda" placeholder="Buscar por titulo/cuerpo de pregunta" id="busqueda">
+                <input type="search" name="busqueda" placeholder="Buscar por titulo/cuerpo de pregunta" class="busqueda">
+            </form>
+            <% if(filtro == null){  %> 
+                <h1>Usuarios</h1> 
+            <% }else {%>  
+                <h1>Usuarios filtrados por "<%=filtro%>"</h1>
+            <% } %> 
+            
+
+            <form action="listar_usuarios" method="post" class="filtrar"> 
+                <input type="search" name="Filtrar" placeholder="Filtrar por usuario" class="busqueda">
+                <input type="submit" value="Filtrar" class="button">
             </form>
 
-            <form action="buscarUsuario" method="post">
-                <input type="submit" value="Busqueda" class="button">
-                <input type="search" name="busqueda" placeholder="Filtrar por usuario" id="busqueda">
-            </form>
-
-
-            <h1>Todos los usuarios</h1>
             <div class="primeraLinea">
                 <h2><%= users.length %> usuarios </h2>
                 
@@ -26,11 +30,12 @@
             <ul class="cuadricula_listar_usuarios">
                 <% users.forEach(function(user) { %>
                 <li >
-                    <div>
+                    <a href="/user/listar_usuarios"> 
                         <img src=/img/<%= user.imagen %> alt=""  class="foto_pequeña">
-                        <h3><%= user.nombre %></h3>
-                        <p>100</p>
-                    </div>
+                        <h3 id="nombre"><%= user.nombre %></h3>
+                        <p id="puntos">100</p>
+                        <p class="etiqueta"> javascript </p>
+                    </a>
                 </li>
                 <% }); %>
             </ul>

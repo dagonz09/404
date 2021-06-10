@@ -84,36 +84,38 @@ routerUser.get("/principal/:id", function (request, response, next) {
         }
     })
 });
-
-/*routerUser.get("/listar_preguntas", function (request, response, next) {
-    console.log("entra en listar preguntas de Usuario");
-    controllerUser.getUser(request.params.id, function (err, result) {
-        console.log("dentro ");
-        if (err) { // error interior
-            console.log("error "+ err);
-            next(err);
-        } else {
-            if (result.length == 0) {
-                console.log("resultado vacio!!!!");
-                response.redirect("/user/login");
-            } else {
-                console.log("user:"+ request.params.id + result[0].nombre);
-                let user2 = {
-                    id: request.params.id,
-                    nombre: result[0].nombre
-                }
-                console.log('Usuario introducido ',user2);
-                response.status(200);
-                response.render("principal", { user: user2});
-            }
-        }
-    })
-}); */
 routerUser.get("/logout", function (request, response) {
     request.session.destroy();
     console.log("usuario destruido, se mete por el get");
     response.redirect("/user/login");
 })
+routerUser.get("/listar_usuarios", function (request, response, next) {
+    
+    controllerUser.getUsers(function (err, result) {
+        if (err) { // error interior
+            console.log("error "+ err);
+            next(err);
+        } else {
+            if (result.length == 0) {
+                response.redirect("/user/principal");
+            } else {
+                 response.status(200);
+                response.render("listar_usuarios", { users: result, filtro: null});
+            }
+        }
+    })
+}); 
+routerUser.post("/listar_usuarios", function (request, response, next) {
+    controllerUser.filterUsersByName(request.body.Filtrar, function (err, result) {
+        if (err) { // error interior
+            next(err);
+        } else {
+            response.status(200);
+            
+            response.render("listar_usuarios", { users: result, filtro: request.body.Filtrar});
+        }
+    })
+});
 
 /*
 routerUser.get("/perfil/:id", function (request, response, next) {

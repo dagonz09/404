@@ -34,7 +34,38 @@ function userLogin(email, pass, callback) {
 function getUser(id, callback) {
     daoU.getUser(id, callback);
 }
-
+function getUsers(callback) {
+    let users = {};
+    daoU.getUsers(function (err, result) {
+        if (err) {
+            callback(err);
+        } else {
+            if (result.length == 0) {
+                callback(err, result);
+            }
+            else{
+                callback(err, result);
+            }
+            
+        }
+    });
+}
+function filterUsersByName(filtro, callback) {
+    
+    daoU.filterUsersByName(filtro,function (err, result) {
+        if (err) {
+            callback(err);
+        } else {
+            if (result.length == 0) {
+                callback(err, result);
+            }
+            else{
+                callback(err, result);
+            }
+            
+        }
+    });
+}
 /*
 function uploadPhoto(id, photo, callback) {
     if (photo == null) {
@@ -77,5 +108,7 @@ function getUserPhoto(id, callback) {
 module.exports = {
     userRegister: userRegister,
     userLogin: userLogin,
-    getUser: getUser
+    getUser: getUser,
+    getUsers: getUsers,
+    filterUsersByName: filterUsersByName
 }
