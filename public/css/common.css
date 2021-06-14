@@ -105,7 +105,10 @@ form{
     margin: 10px;
     color: black;
 }
-
+input{
+    height: 4px;
+    font-weight: bolder;
+}
 input:hover{
     border: 0px solid black;
 }
@@ -127,7 +130,9 @@ input:hover{
 }
 .button:hover{
     font-size: 22px;
-    border: 2px solid black;
-    color: rgb(255, 236, 64);
+    border: 1px solid black;
+    font-weight: bolder;
+    /*color: rgb(255, 236, 64);*/
+    color: rgb(91, 35, 92);
     cursor: pointer;
 }
